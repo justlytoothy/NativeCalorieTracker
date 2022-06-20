@@ -18,7 +18,7 @@ const MyHeader = (props) => (
 			width: '100%',
 		}}
 		leftComponent={
-			<TouchableOpacity onPress={() => props.navigation.navigate('PageTwo')}>
+			<TouchableOpacity onPress={() => props.navigation.openDrawer()}>
 				<Icon size={30} color='white' name='menu'></Icon>
 			</TouchableOpacity>
 		}
