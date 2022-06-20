@@ -9,7 +9,6 @@ const exampleSlice = createSlice({
 	initialState,
 	reducers: {
 		increase: (state) => {
-			console.log('called')
 			state.count++
 		},
 		decrease: (state) => {
