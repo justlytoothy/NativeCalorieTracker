@@ -1,0 +1,4 @@
+client id: b7ae499b16774858a325b1fc4ca0f724
+secret: 72c6875d95e14f98aca5f16da1564d4a
+consumer key: b7ae499b16774858a325b1fc4ca0f724
+consumer secret: dd4670cca1fb4bcd8ac11bfdca4c1963

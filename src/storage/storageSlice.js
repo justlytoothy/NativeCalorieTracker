@@ -1,18 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import storage from './dataStorage.js'
+import axios from 'axios'
 
+const headers = {
+	'x-app-id': '13fa6609',
+	'x-app-key': 'e4a724b80fefba02cae5199bed3e7538',
+	'x-remote-user-id': '0',
+}
 const initialState = {
 	count: 0,
 	status: 'none',
 	refresh: 0,
+	foods: '',
 }
-export const getAllData = createAsyncThunk('storage/all', async (data) => {
+export const getAllData = createAsyncThunk('storage/all', async () => {
 	try {
-		const response = await storage.getData('all')
+		const response = await axios.get(
+			'https://trackapi.nutritionix.com/v2/search/instant?query={}',
+			{ headers: headers }
+		)
 		return response.data
 	} catch (error) {
-		console.log(error)
+		console.log('error called here', error)
 		throw error
 	}
 })
@@ -40,7 +49,8 @@ const storageSlice = createSlice({
 			.addCase(getAllData.fulfilled, (state, action) => {
 				state.status = 'success'
 				state.refresh++
-				return action.payload
+				console.log(action.payload)
+				state.foods = action.payload
 			})
 			.addCase(getAllData.rejected, (state, action) => {
 				state.status = 'failed'
@@ -49,6 +59,7 @@ const storageSlice = createSlice({
 			})
 	},
 })
-export const getNum = (state) => state.example.count
+export const getFoods = (state) => state.storage.foods
+export const getNum = (state) => state.storage.count
 export const { increase, decrease, clear } = storageSlice.actions
 export default storageSlice.reducer
