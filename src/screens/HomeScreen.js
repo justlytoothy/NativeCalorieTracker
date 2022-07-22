@@ -1,16 +1,16 @@
-import { View, Text, FlatList, TouchableHighlight, Image } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { decrease, getNum, increase } from '../redux/exampleSlice'
-import { getAllData } from '../storage/storageSlice'
-import { Button } from '@rneui/base'
-import { Input } from '@rneui/themed'
-import MyHeader from '../general/Header'
-import axios from 'axios'
+import { View, Text, FlatList, TouchableHighlight, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { decrease, getNum, increase } from '../redux/exampleSlice';
+import { getAllData } from '../storage/storageSlice';
+import { Button } from '@rneui/base';
+import { Input } from '@rneui/themed';
+import MyHeader from '../general/Header';
+import axios from 'axios';
 
 const HomeScreen = ({ navigation }) => {
-	const dispatch = useDispatch()
-	const count = useSelector(getNum)
+	const dispatch = useDispatch();
+	const count = useSelector(getNum);
 
 	return (
 		<View
@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
 				justifyContent: 'flex-start',
 				flexDirection: 'column',
 			}}>
-			<MyHeader navigation={navigation} page='Calorie Tracker'></MyHeader>
+			<MyHeader navigation={navigation} page='Dashboard'></MyHeader>
 			<View
 				style={{
 					flex: 1,
@@ -63,14 +63,16 @@ const HomeScreen = ({ navigation }) => {
 					}}>
 					<Button
 						title='Add Foods'
-						onPress={() => navigation.navigate('PageTwo')}></Button>
+						onPress={() =>
+							navigation.navigate('FoodSearch')
+						}></Button>
 					<Button
 						title='See Daily Summary'
 						onPress={() => dispatch(increase())}></Button>
 				</View>
 			</View>
 		</View>
-	)
-}
+	);
+};
 
-export default HomeScreen
+export default HomeScreen;
