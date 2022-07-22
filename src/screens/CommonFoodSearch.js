@@ -16,7 +16,7 @@ const CommonFoodSearch = ({ navigation }) => {
 	const [food, setFood] = useState('');
 	const [search, setSearch] = useState('');
 	const inputRef = React.createRef();
-	let searchString = '';
+	const [details, openDetails] = useState(false);
 	const headers = {
 		'x-app-id': '13fa6609',
 		'x-app-key': 'e4a724b80fefba02cae5199bed3e7538',
@@ -33,7 +33,7 @@ const CommonFoodSearch = ({ navigation }) => {
 					`https://trackapi.nutritionix.com/v2/search/instant?query=${search}`,
 					{ headers: headers }
 				);
-				setResults(response.data.common);
+				setResults(response.data);
 			} catch (error) {
 				console.log(error);
 			}
@@ -69,7 +69,7 @@ const CommonFoodSearch = ({ navigation }) => {
 				</View>
 				<View style={{ width: '100%', paddingBottom: tabBarHeight }}>
 					<FlatList
-						data={results}
+						data={results.common}
 						renderItem={({ item, index, separators }) => (
 							<TouchableHighlight
 								key={item.food_name}

@@ -1,4 +1,13 @@
-import { View, Text, FlatList, TouchableHighlight, Image } from 'react-native';
+import {
+	View,
+	Text,
+	FlatList,
+	TouchableHighlight,
+	Image,
+	Modal,
+	StyleSheet,
+	Pressable,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSelectedFood, getSelectedFood } from '../food/foodSlice';
@@ -15,8 +24,8 @@ const BrandedFoodSearch = ({ navigation }) => {
 	const [results, setResults] = useState(['']);
 	const [food, setFood] = useState('');
 	const [search, setSearch] = useState('');
+	const [modalVisible, setModalVisible] = useState(false);
 	const inputRef = React.createRef();
-	let searchString = '';
 	const headers = {
 		'x-app-id': '13fa6609',
 		'x-app-key': 'e4a724b80fefba02cae5199bed3e7538',
@@ -34,7 +43,7 @@ const BrandedFoodSearch = ({ navigation }) => {
 					`https://trackapi.nutritionix.com/v2/search/instant?query=${search}`,
 					{ headers: headers }
 				);
-				setResults(response.data.branded);
+				setResults(response.data);
 			} catch (error) {
 				console.log(error);
 			}
@@ -42,7 +51,7 @@ const BrandedFoodSearch = ({ navigation }) => {
 	};
 	const selectFood = (newFood) => {
 		setFood(newFood);
-		dispatch(setSelectedFood(newFood));
+		setModalVisible(true);
 	};
 	return (
 		<View
@@ -52,9 +61,31 @@ const BrandedFoodSearch = ({ navigation }) => {
 				justifyContent: 'flex-start',
 				flexDirection: 'column',
 			}}>
+			<Modal
+				animationType='none'
+				presentationStyle={'overFullScreen'}
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={() => {
+					setModalVisible(!modalVisible);
+				}}>
+				<View style={styles.centeredView}>
+					<View style={styles.modalView}>
+						<FoodDetails
+							navigation={navigation}
+							food={food}></FoodDetails>
+						<Pressable
+							style={[styles.button, styles.buttonClose]}
+							onPress={() => setModalVisible(!modalVisible)}>
+							<Text style={styles.textStyle}>Hide Modal</Text>
+						</Pressable>
+					</View>
+				</View>
+			</Modal>
 			<MyHeader
 				navigation={navigation}
 				page='Brand Name Foods'></MyHeader>
+
 			<View
 				style={{
 					flex: 1,
@@ -72,7 +103,7 @@ const BrandedFoodSearch = ({ navigation }) => {
 				</View>
 				<View style={{ width: '100%', paddingBottom: tabBarHeight }}>
 					<FlatList
-						data={results}
+						data={results.branded}
 						renderItem={({ item, index, separators }) => (
 							<TouchableHighlight
 								key={item.food_name}
@@ -109,5 +140,48 @@ const BrandedFoodSearch = ({ navigation }) => {
 		</View>
 	);
 };
+const styles = StyleSheet.create({
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 22,
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 35,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	},
+	buttonOpen: {
+		backgroundColor: '#F194FF',
+	},
+	buttonClose: {
+		backgroundColor: '#2196F3',
+	},
+	textStyle: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: 'center',
+	},
+});
 
 export default BrandedFoodSearch;
